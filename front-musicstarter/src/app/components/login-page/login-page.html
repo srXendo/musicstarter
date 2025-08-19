@@ -2,11 +2,17 @@
 <div class="wrapper_main">
     <div class="wrapper_login">
         <h1>Inicio de sesion</h1>
-        <form action="" method="post" class="form_login">
-            <input type="email" name="email" id="email_login" placeholder="email">
-            <input type="password" name="passwd" id="password_login" placeholder="contraseña">
+        <form [formGroup]="loginForm" class="form_login" (ngSubmit)="login_user()">
+            <input type="email" name="email" id="email_login" placeholder="email" formControlName="email">
+            <input type="password" name="passwd" id="password_login" placeholder="contraseña" formControlName="password">
             <button type="submit">enviar</button>
         </form>
         <button type="button" (click)="login_temporal_user()">iniciar con usuario temporal</button>
+        @if(error_login_temporal_user){
+            <div><h1 class="error_message">error al logear con usuario temporal</h1></div>
+        }
+        @if(error_login_user){
+            <div><h1 class="error_message">error al logear usuario temporal</h1></div>
+        }
     </div>
 </div>

@@ -11,3 +11,7 @@ html, body{
     align-items: center;
     justify-content: center;
 }
+.error_message{
+    color: red;
+    text-align: center;
+}
