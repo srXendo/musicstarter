@@ -1,0 +1,18 @@
+.wrapper_login{
+    min-width: 340px;
+    min-height: 500px;
+    width: 50%;
+    height: 80%;
+    display: flex;
+    flex-flow: column nowrap;
+    border: 1px black solid;
+    border-radius: 13px;
+}
+.form_login{
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 7px;
+    margin-bottom: 10px;
+}
