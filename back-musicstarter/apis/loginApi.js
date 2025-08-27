@@ -1,21 +1,26 @@
 const express = require("express");
-
+const c_cors_middleware = require('./middlewares/cors');
+const routerApi = require("./routerApi");
 class LoginApi {
+  #cors_middleware = new c_cors_middleware() 
+  router = new routerApi('/api/login')
   constructor() {
-    this.router = express.Router();
     this.registerRoutes();
   }
 
   registerRoutes() {
 
-    this.router.post("/temporal", this.temporalLogin);
+    this.router.set_route("POST", "/temporal", this.temporalLogin);
   }
 
+  temporalLogin() {
+    return new Promise(resolve=>resolve([false, 500, 'login.temporal.no.implement']))
+  }
 
-
-  temporalLogin(req, res) {
-    const { name } = req.body;
-    res.json({ message: `Usuario ${name} creado` });
+  login(req, res){
+    const body = req.body;
+    console.log(body)
+    return new Promise(resolve=>resolve([false, 500, 'login.temporal.no.implement']))
   }
 }
 

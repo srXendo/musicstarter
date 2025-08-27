@@ -11,4 +11,8 @@ export class LoginService {
     console.log(environment)
     return this.http.post(`${environment.api_url}/api/login/temporal`, {})
   }
+  login_user(obj: any){
+    console.log(obj)
+    return this.http.post(`${environment.api_url}/api/login`, obj)
+  }
 }

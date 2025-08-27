@@ -29,6 +29,16 @@ export class LoginPage {
     })
   }
   login_user(){
-    this.error_login_user = true
+        this.loginSerivice.login_user(this.loginForm.getRawValue()).subscribe({
+      next: (res: unknown)=>{
+        console.log(res)
+      },
+      error: (err: any)=>{
+        console.error(err)
+        console.error(new Error(err.stack))
+        this.error_login_user = true
+      }
+    })
+
   }
 }
