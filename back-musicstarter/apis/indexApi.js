@@ -14,17 +14,20 @@ server.on("stream", async(stream, headers) => {
   const method = headers[":method"];
   const path = headers[":path"];
   console.log('request on', path, method)
-  // Middleware CORS sencillo
-  let response = {
-    "content-type": "application/json",
-    "access-control-allow-origin": "*",
-    "access-control-allow-methods": "GET,POST,OPTIONS",
-    "access-control-allow-headers": "Content-Type",
-    ":status": 404,
-  };
 
+  console.log('middleware option')
   // OPTIONS preflight
   if (method === "OPTIONS") {
+      // Middleware CORS sencillo
+      
+    let response = {
+      "content-type": "application/json",
+      "access-control-allow-origin": `${process.env.PROT_FRONT}://${process.env.DOMAIN_FRONT}:${process.env.PORT_FRONT}`,
+      "access-control-allow-methods": "GET,POST,OPTIONS",
+      "access-control-allow-headers": "Content-Type",
+      'Access-Control-Allow-Credentials': true,
+      ":status": 404,
+    };
     response[':status'] = 204
     stream.respond(response)
     stream.end();
@@ -32,17 +35,22 @@ server.on("stream", async(stream, headers) => {
   }
   for(let row_route_api of routes){
     if(row_route_api.method === method && row_route_api.path === path){
-      const [is_error_response, status_response, message_response] = await row_route_api.funct()
+      const [is_error_response, status_response, message_response] = await row_route_api.funct(stream, headers)
       if(is_error_response){
         console.error(new Error(message_response))
       }
-      response[':status'] = status_response
-      stream.respond(response)
-      stream.end();
-      return
+      if((message_response instanceof Object)){
+        stream.write(JSON.stringify(message_response))
+      }
+
+      if(!!message_response){
+        stream.write(message_response)
+      }
+      
+      return stream.end()
     }
   }
-
+  
 });
 server.on('error', (err)=>{
   console.error(new Error(err.stack))

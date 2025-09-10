@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { LoginService } from './login.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-page',
@@ -15,11 +16,12 @@ export class LoginPage {
     email: new FormControl('', Validators.required),
     password: new FormControl('', Validators.required)
   })
-  constructor(private loginSerivice: LoginService){}
+  constructor(private loginSerivice: LoginService, private router: Router){}
   login_temporal_user(){
     this.loginSerivice.login_temporal_user().subscribe({
       next: (res: unknown)=>{
         console.log(res)
+        this.router.navigate(['/hub']);
       },
       error: (err: any)=>{
         console.error(err)
@@ -31,7 +33,8 @@ export class LoginPage {
   login_user(){
         this.loginSerivice.login_user(this.loginForm.getRawValue()).subscribe({
       next: (res: unknown)=>{
-        console.log(res)
+        console.log(res, 'login success')
+
       },
       error: (err: any)=>{
         console.error(err)

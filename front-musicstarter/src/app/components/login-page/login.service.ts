@@ -9,10 +9,10 @@ export class LoginService {
   constructor(private http: HttpClient){}
   login_temporal_user():Observable<any>{
     console.log(environment)
-    return this.http.post(`${environment.api_url}/api/login/temporal`, {})
+    return this.http.post(`${environment.api_url}/api/login/temporal`, {}, { withCredentials: true })
   }
   login_user(obj: any){
     console.log(obj)
-    return this.http.post(`${environment.api_url}/api/login`, obj)
+    return this.http.post(`${environment.api_url}/api/login`, obj, { withCredentials: true})
   }
 }
