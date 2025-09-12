@@ -17,26 +17,7 @@ class LoginApi {
   }
 
   temporalLogin(stream, headers) {
-    console.log(this.pool, headers)
-    const {length} = this.pool.get_entities()
-    
-      // Middleware CORS sencillo
-    let response = {
-      "content-type": "application/json",
-      "access-control-allow-origin": `${PROT_FRONT}://${DOMAIN_FRONT}:${PORT_FRONT}`,
-      "access-control-allow-methods": "GET,POST,OPTIONS",
-      'Access-Control-Allow-Credentials': true,
-      "access-control-allow-headers": "Content-Type, Cookies",
-      ":status": 200,
-    };
-
-    if(!headers['cookie'] || !~headers['cookie'].indexOf('musicstarterSession=')){
-      response['Set-Cookie'] = `musicstarterSession=${length};SameSite=None; Domain=${DOMAIN_FRONT}; HttpOnly; Secure; musicstarterSession2=${length};SameSite=None; Domain=${DOMAIN_FRONT}; HttpOnly; Secure`
-      this.pool.set_entity(stream)
-    }
-    
-    stream.respond(response)
-    return new loginController().temporalLogin()
+    return new loginController().temporalLogin(headers, this.pool, stream)
   }
 
   login(req, res){

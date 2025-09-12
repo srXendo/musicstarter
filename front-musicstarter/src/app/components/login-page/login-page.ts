@@ -31,7 +31,7 @@ export class LoginPage {
     })
   }
   login_user(){
-        this.loginSerivice.login_user(this.loginForm.getRawValue()).subscribe({
+    this.loginSerivice.login_user(this.loginForm.getRawValue()).subscribe({
       next: (res: unknown)=>{
         console.log(res, 'login success')
 

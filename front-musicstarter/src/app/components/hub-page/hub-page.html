@@ -1,1 +1,10 @@
-<p>hub-page works!</p>
+<div class="wrapper_main">
+    <div class="wrapper_hub">
+        @if(arr_hubs$ | async; as arr_hubs){
+            @for (hub of arr_hubs; track $index) {
+                <button type="button" (click)="go_room($index)">Sala {{$index}}</button>
+            }
+        }
+        <button type="button" (click)="create_hub()">crear hub</button>
+    </div>
+</div>

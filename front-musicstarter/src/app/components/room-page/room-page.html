@@ -1,0 +1,32 @@
+<h1>MusicStarter</h1>
+
+<div class="controls">
+  <input [(ngModel)]="inputYoutube" placeholder="YouTube URL" />
+  <button (click)="addNewVideo()">Add new video</button>
+  <button (click)="pauseVideo()">Pause</button>
+  <button (click)="playVideo()">Play</button>
+  <button (click)="stopVideo()">Stop</button>
+  <button (click)="addFriend()">Add Friend</button>
+</div>
+
+<iframe
+  #youtubeFrame
+  width="560" height="315"
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+  allowfullscreen
+></iframe>
+
+<div class="list">
+  video:   
+  @for (id_video of videos; track $index) {
+        
+        <div>
+            <p>{{ id_video }}</p>
+            <button (click)="loadVideo(id_video)">
+            {{ currentVideoId === id_video ? "Is focused" : "Focus this" }}
+            </button>
+        </div>
+    }
+</div>
+
