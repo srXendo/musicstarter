@@ -16,7 +16,7 @@ class LoginApi {
     this.router.set_route("POST", "/temporal", this.temporalLogin.bind(this));
   }
 
-  temporalLogin(stream, headers) {
+  async temporalLogin(stream, headers) {
     return new loginController().temporalLogin(headers, this.pool, stream)
   }
 

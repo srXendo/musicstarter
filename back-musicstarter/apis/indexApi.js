@@ -3,12 +3,10 @@ const fs = require("fs");
 
 // 🔹 Importar APIs con rutas
 const loginApi = require("./loginApi");
-const hubApi = require("./hubApi");
 const roomApi = require("./roomApi");
 
 const routes = [
   ...loginApi.get_routes(),
-  ...hubApi.get_routes(),
   ...roomApi.get_routes(),
 ];
 
@@ -76,10 +74,9 @@ server.on("stream", async (stream, headers) => {
 
           response[":status"] = status;
 
-          if (newCookie) {
-            response["Set-Cookie"] = `musicstarterSession=${newCookie};Path=/;SameSite=none;Domain=${process.env.DOMAIN_FRONT};Secure;HttpOnly;`;
+          if (!!newCookie || newCookie === 0) {
+            response["Set-Cookie"] = `musicstarterSession=${newCookie.toString()};Path=/;SameSite=none;Domain=${process.env.DOMAIN_FRONT};Secure;HttpOnly;`;
           }
-
           stream.respond(response);
 
           if (message instanceof Object) {

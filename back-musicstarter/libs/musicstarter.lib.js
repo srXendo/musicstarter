@@ -3,67 +3,84 @@ class c_muscistarter{
   LIMIT_STREAMS=10;
   ARR_IDS_YOUTUBE=[];
   ARR_STREAMS=[];
-  del_person(stream){
-    // Remove the closed stream from the array
-    const index = this.ARR_STREAMS.indexOf(stream);
-    if (index !== -1) {
-      this.ARR_STREAMS.splice(index, 1);
-    }
+  OBJ_ROOMS = {
   }
-  async add_person(id_user, stream){
+  ROOMS_LENGTH = 0
+  get_rooms(){
+    return Object.values(this.OBJ_ROOMS)
+  }
+  create_room(id_user){
+    this.OBJ_ROOMS[this.ROOMS_LENGTH] = {
+      admin_user: id_user,
+      obj_house: {},
+      arr_ids_videos: []
+    }
+    const old_length = this.ROOMS_LENGTH
+    this.ROOMS_LENGTH++
+    return old_length
+  }
+  del_person(id_user, id_room){
+    // Remove the closed stream from the array
+    this.OBJ_ROOMS[id_room].obj_house[id_user] = undefined
+  }
+  async add_person(id_user, stream, id_room){
     console.log('new person enter')
-
-    if(this.ARR_STREAMS.length > 10) return false;
+    if(!this.OBJ_ROOMS[id_room]) return false;
     stream.on('close', ()=>{
-      this.del_person(stream)
+      this.del_person(id_user, id_room)
     });  
-    this.ARR_STREAMS.push(stream)
-    //this.send_event_broadcast('new_person', this.stream)
-    console.log(`length videos id: ${this.ARR_IDS_YOUTUBE.length}`)
+    if(!this.OBJ_ROOMS[id_room].obj_house[id_user]){
+      this.OBJ_ROOMS[id_room].obj_house[id_user] = {
+        stream: stream
+      }
+    }
+    this.OBJ_ROOMS[id_room].obj_house[id_user].stream = stream
+    //this.send_event_broadcast('new_person', this.stream, id_room)
+    console.log(`length videos id: ${this.OBJ_ROOMS[id_room].arr_ids_videos.length}`)
     const obj = {
       event_type: 'print_list_video',
-      event_value: this.ARR_IDS_YOUTUBE
+      event_value: this.OBJ_ROOMS[id_room].arr_ids_videos
     }
     const instructions = obj
     return instructions
 
   }
-  send_event_broadcast(event_type, event_value){
-    console.log('length player online:', this.ARR_STREAMS.length)
-    this.ARR_STREAMS.map(stream=>{
-      const obj = {
+  send_event_broadcast(event_type, event_value, id_room){
+    for(let id_usr in this.OBJ_ROOMS[id_room].obj_house){
+
+      console.log('send event to broadcast', event_type, event_value)
+      this.OBJ_ROOMS[id_room].obj_house[id_usr].stream.write(`data: ${JSON.stringify({
         event_type,
         event_value
-      }
-      console.log('send event to broadcast', event_type, event_value)
-      stream.write(`data: ${JSON.stringify(obj)}\n\n`)
-    })
+      })}\n\n`)
+    }
+    console.log(`length player online in room: ${Object.keys(this.OBJ_ROOMS[id_room].obj_house).length}` )
     return
   }
-  add_video(id_youtube){
+  add_video(id_youtube, id_room){
 
-    if(this.ARR_IDS_YOUTUBE.length > 10)
-      return false;
-
-    this.ARR_IDS_YOUTUBE.push(id_youtube)
-    console.log('length id videos:', this.ARR_IDS_YOUTUBE.length)
-    this.send_event_broadcast('add_video', id_youtube)
+    this.OBJ_ROOMS[id_room].arr_ids_videos.push(id_youtube)
+    this.send_event_broadcast('add_video', id_youtube, id_room)
     return 
   }  
-  load_video(id_youtube){
+  load_video(id_youtube, id_room){
 
-    this.send_event_broadcast('load_video', id_youtube)
+    this.send_event_broadcast('load_video', id_youtube, id_room)
+    return
   }
-  pause_video(id_youtube){
-    this.send_event_broadcast('pause_video', id_youtube)
+  pause_video(id_youtube, id_room){
+    this.send_event_broadcast('pause_video', id_youtube, id_room)
+    return
   }
-  play_video(id_youtube){
-    this.send_event_broadcast('play_video', id_youtube)
+  play_video(id_youtube, id_room){
+    this.send_event_broadcast('play_video', id_youtube, id_room)
+    return
   }
-  stop_video(id_youtube){
-    this.send_event_broadcast('stop_video', id_youtube)
+  stop_video(id_youtube, id_room){
+    this.send_event_broadcast('stop_video', id_youtube, id_room)
+    return
   }
-  del_video(id_youtube){
+  del_video(id_youtube, id_room){
 
   }
   get_login_params(stream){

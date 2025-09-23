@@ -16,24 +16,24 @@ export class RoomService {
   constructor(private http: HttpClient, private zone: NgZone) {}
 
   // === REST endpoints ===
-  addVideo(id: string) {
-    return this.http.get(`${this.baseUrl}/add_video/${id}`, {withCredentials: true});
+  addVideo(id_vdo: string, id_room: number | null) {
+    return this.http.get(`${this.baseUrl}/add_video/${id_room}/${id_vdo}`, {withCredentials: true});
   }
 
-  pauseVideo(id: string) {
-    return this.http.get(`${this.baseUrl}/pause_video/${id}`, {withCredentials: true});
+  pauseVideo(id_vdo: string, id_room: number | null) {
+    return this.http.get(`${this.baseUrl}/pause_video/${id_room}/${id_vdo}`, {withCredentials: true});
   }
 
-  playVideo(id: string) {
-    return this.http.get(`${this.baseUrl}/play_video/${id}`, {withCredentials: true});
+  playVideo(id_vdo: string, id_room: number | null) {
+    return this.http.get(`${this.baseUrl}/play_video/${id_room}/${id_vdo}`, {withCredentials: true});
   }
 
-  loadVideo(id: string) {
-    return this.http.get(`${this.baseUrl}/load_video/${id}`, {withCredentials: true});
+  loadVideo(id_vdo: string, id_room: number | null) {
+    return this.http.get(`${this.baseUrl}/load_video/${id_room}/${id_vdo}`, {withCredentials: true});
   }
 
-  stopVideo(id: string) {
-    return this.http.get(`${this.baseUrl}/stop_video/${id}`, {withCredentials: true});
+  stopVideo(id_vdo: string, id_room: number | null) {
+    return this.http.get(`${this.baseUrl}/stop_video/${id_room}/${id_vdo}`, {withCredentials: true});
   }
 
   addFriend(email: string) {
@@ -45,10 +45,10 @@ export class RoomService {
   }
 
   // === SSE con Angular ===
-  connectToServerEvents(): Observable<ServerEvent> {
+  connectToServerEvents(id_room: any): Observable<ServerEvent> {
     const subject = new Subject<ServerEvent>();
     // 🔄 antes: /tt2
-    const source = new EventSource(`${this.baseUrl}/server`, { withCredentials: true });
+    const source = new EventSource(`${this.baseUrl}/server/${id_room}`, { withCredentials: true });
 
     source.onmessage = (msg) => {
       console.log('newmsg: ', msg)

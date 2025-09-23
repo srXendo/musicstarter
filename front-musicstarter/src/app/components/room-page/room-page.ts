@@ -28,7 +28,7 @@ export class RoomPage implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     // Suscripción a eventos SSE
-    this.sseSub = this.roomService.connectToServerEvents().subscribe({
+    this.sseSub = this.roomService.connectToServerEvents(this.id_room).subscribe({
       next: (event) => this.handleServerEvent(event),
       error: (err) => console.error('SSE error', err)
     });
@@ -77,7 +77,7 @@ export class RoomPage implements OnInit, OnDestroy {
       alert('La URL no tiene parámetro ?v=');
       return;
     }
-    this.roomService.addVideo(id).subscribe(() => {
+    this.roomService.addVideo(id, this.id_room).subscribe(() => {
       this.setYoutubeSrc(id);
       if (!this.videos.includes(id)) this.videos.push(id);
     });
@@ -85,28 +85,28 @@ export class RoomPage implements OnInit, OnDestroy {
 
   pauseVideo() {
     if (this.currentVideoId) {
-      this.roomService.pauseVideo(this.currentVideoId).subscribe();
+      this.roomService.pauseVideo(this.currentVideoId, this.id_room).subscribe();
       this.sendCommand('pauseVideo');
     }
   }
 
   playVideo() {
     if (this.currentVideoId) {
-      this.roomService.playVideo(this.currentVideoId).subscribe();
+      this.roomService.playVideo(this.currentVideoId, this.id_room).subscribe();
       this.sendCommand('playVideo');
     }
   }
 
   stopVideo() {
     if (this.currentVideoId) {
-      this.roomService.stopVideo(this.currentVideoId).subscribe();
+      this.roomService.stopVideo(this.currentVideoId, this.id_room).subscribe();
       this.sendCommand('stopVideo');
     }
   }
 
   loadVideo(id: string) {
     this.currentVideoId = id;
-    this.roomService.loadVideo(id).subscribe();
+    this.roomService.loadVideo(id, this.id_room).subscribe();
     this.setYoutubeSrc(id);
     this.sendCommand('playVideo');
   }
