@@ -27,6 +27,12 @@ export class RoomService {
   playVideo(id_vdo: string, id_room: number | null) {
     return this.http.get(`${this.baseUrl}/play_video/${id_room}/${id_vdo}`, {withCredentials: true});
   }
+  previousVideo(id_vdo: string, id_room: number | null){
+     return this.http.get(`${this.baseUrl}/previous_video/${id_room}/${id_vdo}`, {withCredentials: true});
+  }
+  nextVideo(id_vdo: string, id_room: number | null){
+     return this.http.get(`${this.baseUrl}/next_video/${id_room}/${id_vdo}`, {withCredentials: true});
+  }
 
   loadVideo(id_vdo: string, id_room: number | null) {
     return this.http.get(`${this.baseUrl}/load_video/${id_room}/${id_vdo}`, {withCredentials: true});

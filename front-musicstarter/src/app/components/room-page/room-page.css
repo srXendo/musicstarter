@@ -1,0 +1,7 @@
+.focused_video{
+    border: 1px black solid;
+}
+.row_video_list{
+    min-width: 340px;
+    width: 340px;
+}

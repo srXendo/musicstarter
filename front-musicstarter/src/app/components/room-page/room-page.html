@@ -7,6 +7,8 @@
   <button (click)="playVideo()">Play</button>
   <button (click)="stopVideo()">Stop</button>
   <button (click)="addFriend()">Add Friend</button>
+  <button (click)="previousVideo()">Previous</button>
+  <button (click)="nextVideo()">Next</button>
 </div>
 
 <iframe
@@ -21,9 +23,11 @@
   video:   
   @for (id_video of videos; track $index) {
         
-        <div>
+        <div class="row_video_list" [class]="{
+          'focused_video': currentVideoId === id_video
+        }">
             <p>{{ id_video }}</p>
-            <button (click)="loadVideo(id_video)">
+            <button (click)="loadVideo(id_video)" [disabled]="currentVideoId === id_video">
             {{ currentVideoId === id_video ? "Is focused" : "Focus this" }}
             </button>
         </div>

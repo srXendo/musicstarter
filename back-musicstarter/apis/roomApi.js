@@ -17,6 +17,8 @@ class RoomApi {
     this.router.set_route("GET", "/pause_video/:id_room/:id_video", this.pauseVideo.bind(this));
     this.router.set_route("GET", "/play_video/:id_room/:id_video", this.playVideo.bind(this));
     this.router.set_route("GET", "/stop_video/:id_room/:id_video", this.stopVideo.bind(this));
+    this.router.set_route("GET", "/previous_video/:id_room/:id_video", this.previousVideo.bind(this));
+    this.router.set_route("GET", "/next_video/:id_room/:id_video", this.nextVideo.bind(this));
 
     // server status
     this.router.set_route("GET", "/server/:id_room", this.server.bind(this));
@@ -42,18 +44,17 @@ class RoomApi {
     const id_user = params.get("musicstarterSession");
     console.log(params)
     if (id_user === null) {
-
-      return [false, 404, {}];
+      return [false, 403, {}];
     }
     const id_room = musicstarter.create_room(id_user)
-    return [false, 200, {id_room: id_room}]
+    return [false, 200, {id_room: id_room, id_admin: id_user, obj_house: {}, arr_ids_videos: []}]
   }
 
   async loadVideo(stream, headers, params) {
     const id_youtube = params.id_video;
     const id_room = params.id_room
-    musicstarter.add_video(id_youtube, id_room);
-
+    /*musicstarter.add_video(id_youtube, id_room);*/
+    musicstarter.load_video(id_youtube, id_room);
     return [false, 204]
   }
 
@@ -93,7 +94,22 @@ class RoomApi {
 
     return [false, 204]
   }
+  async previousVideo(stream, headers, params) {
+    const id_youtube = params.id_video;
+    const id_room = params.id_room
 
+    musicstarter.previous_video(id_youtube, id_room);
+
+    return [false, 204]
+  }
+  async nextVideo(stream, headers, params) {
+    const id_youtube = params.id_video;
+    const id_room = params.id_room
+
+    musicstarter.next_video(id_youtube, id_room);
+
+    return [false, 204]
+  }
   async stopVideo(stream, headers, params) {
     const id_youtube = params.id_video;
     const id_room = params.id_room

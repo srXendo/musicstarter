@@ -42,7 +42,7 @@ export class RoomPage implements OnInit, OnDestroy {
   private handleServerEvent(event: ServerEvent) {
     switch (event.event_type) {
       case 'load_video':
-        this.loadVideo(event.event_value);
+        this.recive_loading(event.event_value);
         break;
       case 'print_list_video':
         this.videos = event.event_value;
@@ -51,13 +51,13 @@ export class RoomPage implements OnInit, OnDestroy {
         this.setYoutubeSrc(event.event_value);
         break;
       case 'pause_video':
-        this.sendCommand('pauseVideo');
+        this.sendCommandFrame('pauseVideo');
         break;
       case 'play_video':
-        this.sendCommand('playVideo');
+        this.sendCommandFrame('playVideo');
         break;
       case 'stop_video':
-        this.sendCommand('stopVideo');
+        this.sendCommandFrame('stopVideo');
         break;
       case 'friend_list':
         console.log('Friend list:', event.event_value);
@@ -86,31 +86,44 @@ export class RoomPage implements OnInit, OnDestroy {
   pauseVideo() {
     if (this.currentVideoId) {
       this.roomService.pauseVideo(this.currentVideoId, this.id_room).subscribe();
-      this.sendCommand('pauseVideo');
+      this.sendCommandFrame('pauseVideo');
     }
   }
 
   playVideo() {
     if (this.currentVideoId) {
       this.roomService.playVideo(this.currentVideoId, this.id_room).subscribe();
-      this.sendCommand('playVideo');
+      this.sendCommandFrame('playVideo');
     }
   }
 
   stopVideo() {
     if (this.currentVideoId) {
       this.roomService.stopVideo(this.currentVideoId, this.id_room).subscribe();
-      this.sendCommand('stopVideo');
+      this.sendCommandFrame('stopVideo');
     }
   }
 
   loadVideo(id: string) {
     this.currentVideoId = id;
     this.roomService.loadVideo(id, this.id_room).subscribe();
-    this.setYoutubeSrc(id);
-    this.sendCommand('playVideo');
-  }
 
+  }
+  recive_loading(id: string){
+    this.setYoutubeSrc(id);
+    this.sendCommandFrame('playVideo');
+  }
+  previousVideo(){
+    if (this.currentVideoId) {
+      this.roomService.previousVideo(this.currentVideoId, this.id_room).subscribe();
+
+    }    
+  }
+  nextVideo(){
+    if (this.currentVideoId) {
+      this.roomService.nextVideo(this.currentVideoId, this.id_room).subscribe();
+    }    
+  }
   addFriend() {
     const email = prompt('Introduce el email de tu amigo');
     if (email) {
@@ -134,7 +147,7 @@ export class RoomPage implements OnInit, OnDestroy {
     console.log('set youtube src')
   }
 
-  private sendCommand(command: string) {
+  private sendCommandFrame(command: string) {
     this.youtubeFrame.nativeElement.contentWindow?.postMessage(
       JSON.stringify({ event: 'command', func: command, args: '' }),
       '*'

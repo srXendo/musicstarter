@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { HubService } from './hub.service';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, map, Observable, of } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
@@ -12,15 +12,17 @@ import { Router } from '@angular/router';
 })
 export class HubPage {
   error_create: boolean = false;
-  arr_hubs$: Observable<any[]>;
+   arr_hubs$ = new BehaviorSubject<any[]>([]);
   constructor(private hubService: HubService, private router: Router){
-    this.arr_hubs$ = this.hubService.get_hubs()
+    this.hubService.get_hubs().subscribe(hubs => {
+      this.arr_hubs$.next(hubs);
+    });
   }
   create_hub(){
-    this.hubService.create_hub().subscribe(res=>{
-      console.log(res)
-      this.error_create = true
-    })
+    this.hubService.create_hub().subscribe(res => {
+      const current = this.arr_hubs$.getValue();
+      this.arr_hubs$.next([...current, res]);
+    });
   }
   go_room(id: number){
     this.router.navigate([`/room/${id}`]);

@@ -76,6 +76,27 @@ class c_muscistarter{
     this.send_event_broadcast('play_video', id_youtube, id_room)
     return
   }
+  
+  previous_video(id_youtube, id_room){
+    const idx_actual = this.OBJ_ROOMS[id_room].arr_ids_videos.indexOf(id_youtube)
+    let next_idx = this.OBJ_ROOMS[id_room].arr_ids_videos.length - 1
+    if(idx_actual - 1 >= 0){
+      next_idx = idx_actual - 1
+    }
+    console.log(`previews: ${next_idx} --- ${this.OBJ_ROOMS[id_room].arr_ids_videos[next_idx]}`)
+    this.send_event_broadcast('load_video', this.OBJ_ROOMS[id_room].arr_ids_videos[next_idx], id_room)
+    return
+  }
+  next_video(id_youtube, id_room){
+    const idx_actual = this.OBJ_ROOMS[id_room].arr_ids_videos.indexOf(id_youtube)
+    let next_idx = 0
+    if(idx_actual + 1 <= this.OBJ_ROOMS[id_room].arr_ids_videos.length -1){
+      next_idx = idx_actual + 1
+    }
+    console.log(`next: ${next_idx} ---  ${this.OBJ_ROOMS[id_room].arr_ids_videos[next_idx]}`)
+    this.send_event_broadcast('load_video', this.OBJ_ROOMS[id_room].arr_ids_videos[next_idx], id_room)
+    return
+  }
   stop_video(id_youtube, id_room){
     this.send_event_broadcast('stop_video', id_youtube, id_room)
     return

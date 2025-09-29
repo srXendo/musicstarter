@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class HubService {
     constructor(private http: HttpClient){}
-    create_hub(){
+    create_hub(): Observable<any>{
       return this.http.put(`${environment.api_url}/api/room/hub`,{},{ withCredentials: true})
     }
     get_hubs(): Observable<any[]>{
