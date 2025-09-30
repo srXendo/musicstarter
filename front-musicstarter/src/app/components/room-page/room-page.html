@@ -11,34 +11,42 @@
     <div class="content_medialplayer">
       <div class="medialplayer">
         <div class="content_add_video_mediaplayer">
-          <input class="input_add_video_medialplay" [innerText]="'pega url de youtube'"/><button type="button">añadir</button>
+          <input class="input_add_video_medialplay" [(ngModel)]="inputYoutube" [innerText]="'pega url de youtube'"/><button (click)="addNewVideo()" type="button">añadir</button>
         </div>
         <div class="main_player">
-          <div class="icon_main_player"></div>
+          <iframe
+            class="icon_main_player"
+            #youtubeFrame
+            width="560" height="315"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+          ></iframe>
+
           <div class="title_main_player">
-            <span>♪ Reproduciendo: La Canción del Chipirón.</span>
+            <span>♪ Reproduciendo: {{currentVideoId ? currentVideoId.title : ''}}</span>
           </div>
           <div class="content_progress_main_player">
             <div class="progress_bar_main_player">
               <div class="progress_circle_main_player">
                 <div class="actual_time_main_player">1:25</div>
               </div>
-              <div class="end_time_main_player">8:42</div>
+              <div class="end_time_main_player">{{currentVideoId ? formatTime(currentVideoId.lengthSeconds) : '8:42'}}</div>
             </div>
             
           </div>
           <div class="buttons_main_player">
-            <div class="button_previus_main_player">
+            <div class="button_previus_main_player" (click)="previousVideo()">
               <svg viewBox="0 0 24 24">
                 <path d="M6 19V5h2v14H6zm3.5-7L20 19V5l-10.5 7z"/>
               </svg>              
             </div>
-            <div class="button_start_pause_main_player">
+            <div class="button_start_pause_main_player" (click)="playVideo()">
               <svg viewBox="0 0 24 24">
                 <path d="M8 5v14l11-7z"/>
               </svg>
             </div>
-            <div class="button_next_main_player">
+            <div class="button_next_main_player" (click)="nextVideo()">
               <svg viewBox="0 0 24 24">
                 <path d="M16 5h2v14h-2zm-3.5 7L4 19V5l8.5 7z"/>
               </svg>              
@@ -51,27 +59,17 @@
       <div class="content_list_medialplayer">
         <h2>Lista de reproducción</h2>
         <div class="content_list_row_medialplayer">
-          <div class="list_row_medialplayer">
-            <div class="icon_row_medialplayer"></div>
-            <div class="content_title_duration_row_mediaplayer">
-              <div class="title_row_medialplayer"><span>el titulomaster</span></div>
-              <div class="duration_row_medialplayer">2:30</div>
+          @for (video of videos; track $index) {
+            <div [class]="{
+              'list_row_medialplayer_focused': currentVideoId && currentVideoId.id_youtube === video.id_youtube
+            }" class="list_row_medialplayer" (click)="loadVideo(video.id_youtube)" >
+              <div class="icon_row_medialplayer" style="background-image: url('{{video.thumbnails[0].url}}');"></div>
+              <div class="content_title_duration_row_mediaplayer">
+                <div class="title_row_medialplayer"><span>{{video.title}}</span></div>
+                <div class="duration_row_medialplayer">{{formatTime(video.lengthSeconds)}}</div>
+              </div>
             </div>
-          </div>
-          <div class="list_row_medialplayer">
-            <div class="icon_row_medialplayer"></div>
-            <div class="content_title_duration_row_mediaplayer">
-              <div class="title_row_medialplayer"><span>el titulomaster</span></div>
-              <div class="duration_row_medialplayer">2:30</div>
-            </div>
-          </div>
-          <div class="list_row_medialplayer list_row_medialplayer_focused">
-            <div class="icon_row_medialplayer"></div>
-            <div class="content_title_duration_row_mediaplayer">
-              <div class="title_row_medialplayer"><span>el titulomaster</span></div>
-              <div class="duration_row_medialplayer">2:30</div>
-            </div>
-          </div>                    
+          }                    
         </div>
       </div>
     </div>

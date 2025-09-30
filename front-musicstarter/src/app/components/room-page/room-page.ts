@@ -15,7 +15,7 @@ export class RoomPage implements OnInit, OnDestroy {
   @ViewChild('youtubeFrame') youtubeFrame!: ElementRef<HTMLIFrameElement>;
 
   inputYoutube = '';
-  currentVideoId: string | null = null;
+  currentVideoId: any = null;
   videos: any[] = [];
   private sseSub?: Subscription;
 
@@ -42,14 +42,18 @@ export class RoomPage implements OnInit, OnDestroy {
   private handleServerEvent(event: ServerEvent) {
     switch (event.event_type) {
       case 'load_video':
+        this.currentVideoId = this.videos.filter(i=>i.id_youtube === event.event_value)[0];
         this.recive_loading(event.event_value);
+       
         break;
       case 'print_list_video':
         this.videos = event.event_value;
         break;
       case 'add_video':
         console.log('add video called: ', event.event_value)
+        this.currentVideoId = event.event_value;
         this.videos.push(event.event_value)
+        
         this.setYoutubeSrc(event.event_value.id_youtube);
         break;
       case 'pause_video':
@@ -92,29 +96,27 @@ export class RoomPage implements OnInit, OnDestroy {
 
   pauseVideo() {
     if (this.currentVideoId) {
-      this.roomService.pauseVideo(this.currentVideoId, this.id_room).subscribe();
+      this.roomService.pauseVideo(this.currentVideoId.id_youtube, this.id_room).subscribe();
       this.sendCommandFrame('pauseVideo');
     }
   }
 
   playVideo() {
     if (this.currentVideoId) {
-      this.roomService.playVideo(this.currentVideoId, this.id_room).subscribe();
+      this.roomService.playVideo(this.currentVideoId.id_youtube, this.id_room).subscribe();
       this.sendCommandFrame('playVideo');
     }
   }
 
   stopVideo() {
     if (this.currentVideoId) {
-      this.roomService.stopVideo(this.currentVideoId, this.id_room).subscribe();
+      this.roomService.stopVideo(this.currentVideoId.id_youtube, this.id_room).subscribe();
       this.sendCommandFrame('stopVideo');
     }
   }
 
   loadVideo(id: string) {
-    this.currentVideoId = id;
     this.roomService.loadVideo(id, this.id_room).subscribe();
-
   }
   recive_loading(id: string){
     this.setYoutubeSrc(id);
@@ -122,13 +124,13 @@ export class RoomPage implements OnInit, OnDestroy {
   }
   previousVideo(){
     if (this.currentVideoId) {
-      this.roomService.previousVideo(this.currentVideoId, this.id_room).subscribe();
+      this.roomService.previousVideo(this.currentVideoId.id_youtube, this.id_room).subscribe();
 
     }    
   }
   nextVideo(){
     if (this.currentVideoId) {
-      this.roomService.nextVideo(this.currentVideoId, this.id_room).subscribe();
+      this.roomService.nextVideo(this.currentVideoId.id_youtube, this.id_room).subscribe();
     }    
   }
   addFriend() {
@@ -153,7 +155,6 @@ export class RoomPage implements OnInit, OnDestroy {
   }
 
   private setYoutubeSrc(id: string) {
-    this.currentVideoId = id;
     this.youtubeFrame.nativeElement.src = `https://www.youtube.com/embed/${id}?enablejsapi=1`;
     console.log('set youtube src', id)
   }

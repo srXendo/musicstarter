@@ -160,11 +160,11 @@
 }
 
 .icon_main_player{
-    width: 200px;
+    width: 339px;
     height: 200px;
     background-position: center;
 
-    background: url('./../../../../public/default.png');
+    /*background: url('./../../../../public/default.png');*/
     background-size:     cover;                      /* <------ */
     background-repeat:   no-repeat;
     background-position: center center;     
