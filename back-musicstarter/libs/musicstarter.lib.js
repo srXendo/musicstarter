@@ -1,3 +1,5 @@
+const youtube_get_basic_info = require("./youtube_get_basic_info");
+
 class c_muscistarter{
   LIMIT_IDS_YOUTUBE=10;
   LIMIT_STREAMS=10;
@@ -57,11 +59,18 @@ class c_muscistarter{
     console.log(`length player online in room: ${Object.keys(this.OBJ_ROOMS[id_room].obj_house).length}` )
     return
   }
-  add_video(id_youtube, id_room){
-
-    this.OBJ_ROOMS[id_room].arr_ids_videos.push(id_youtube)
-    this.send_event_broadcast('add_video', id_youtube, id_room)
-    return 
+  async add_video(id_youtube, id_room){
+    const idx = this.OBJ_ROOMS[id_room].arr_ids_videos.length
+    const basic_info = await youtube_get_basic_info(id_youtube)
+    if(!basic_info){
+      return
+    }
+    this.OBJ_ROOMS[id_room].arr_ids_videos.push({
+      id_youtube: id_youtube,
+      ...basic_info
+    })
+    this.send_event_broadcast('add_video', this.OBJ_ROOMS[id_room].arr_ids_videos[idx], id_room)
+    return this.OBJ_ROOMS[id_room].arr_ids_videos
   }  
   load_video(id_youtube, id_room){
 
@@ -78,23 +87,23 @@ class c_muscistarter{
   }
   
   previous_video(id_youtube, id_room){
-    const idx_actual = this.OBJ_ROOMS[id_room].arr_ids_videos.indexOf(id_youtube)
+    const idx_actual = this.OBJ_ROOMS[id_room].arr_ids_videos.map(obj=>obj.id_youtube).indexOf(id_youtube)
     let next_idx = this.OBJ_ROOMS[id_room].arr_ids_videos.length - 1
     if(idx_actual - 1 >= 0){
       next_idx = idx_actual - 1
     }
     console.log(`previews: ${next_idx} --- ${this.OBJ_ROOMS[id_room].arr_ids_videos[next_idx]}`)
-    this.send_event_broadcast('load_video', this.OBJ_ROOMS[id_room].arr_ids_videos[next_idx], id_room)
+    this.send_event_broadcast('load_video', this.OBJ_ROOMS[id_room].arr_ids_videos[next_idx].id_youtube, id_room)
     return
   }
   next_video(id_youtube, id_room){
-    const idx_actual = this.OBJ_ROOMS[id_room].arr_ids_videos.indexOf(id_youtube)
+    const idx_actual = this.OBJ_ROOMS[id_room].arr_ids_videos.map(obj=>obj.id_youtube).indexOf(id_youtube)
     let next_idx = 0
-    if(idx_actual + 1 <= this.OBJ_ROOMS[id_room].arr_ids_videos.length -1){
+    if(idx_actual + 1 < this.OBJ_ROOMS[id_room].arr_ids_videos.length){
       next_idx = idx_actual + 1
     }
-    console.log(`next: ${next_idx} ---  ${this.OBJ_ROOMS[id_room].arr_ids_videos[next_idx]}`)
-    this.send_event_broadcast('load_video', this.OBJ_ROOMS[id_room].arr_ids_videos[next_idx], id_room)
+    console.log(`next: ${idx_actual} ${next_idx} ${idx_actual + 1 < this.OBJ_ROOMS[id_room].arr_ids_videos.length} ---  ${this.OBJ_ROOMS[id_room].arr_ids_videos[next_idx]}`)
+    this.send_event_broadcast('load_video', this.OBJ_ROOMS[id_room].arr_ids_videos[next_idx].id_youtube, id_room)
     return
   }
   stop_video(id_youtube, id_room){

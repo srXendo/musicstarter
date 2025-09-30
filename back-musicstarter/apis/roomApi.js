@@ -62,7 +62,7 @@ class RoomApi {
     console.log('add videos', params)
     const id_youtube = params.id_video;
     const id_room = params.id_room
-    musicstarter.add_video(id_youtube, id_room);
+    const video_basic_info = await musicstarter.add_video(id_youtube, id_room);
     const response =  {
       "access-control-allow-origin": `${process.env.PROT_FRONT}://${process.env.DOMAIN_FRONT}:${process.env.PORT_FRONT}`,
       "access-control-allow-methods": "GET,POST,OPTIONS,PUT",
@@ -73,7 +73,7 @@ class RoomApi {
     }
     console.log('add videos')
     stream.respond(response)
-    stream.write('')
+    stream.write(JSON.stringify(video_basic_info))
     stream.end()
     return null
   }

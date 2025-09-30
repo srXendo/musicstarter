@@ -19,18 +19,21 @@
   allowfullscreen
 ></iframe>
 
-<div class="list">
-  video:   
-  @for (id_video of videos; track $index) {
-        
-        <div class="row_video_list" [class]="{
-          'focused_video': currentVideoId === id_video
-        }">
-            <p>{{ id_video }}</p>
-            <button (click)="loadVideo(id_video)" [disabled]="currentVideoId === id_video">
-            {{ currentVideoId === id_video ? "Is focused" : "Focus this" }}
-            </button>
-        </div>
-    }
+<div class="wrapper_video_list">
+ 
+  @for (video of videos; track $index) {
+    <div class="miDiv">
+      <div class="background" [class]="{
+      'focused_video': currentVideoId === video.id_youtube
+    }" style="background-image: url('{{video.thumbnails[0].url}}');"></div>
+      <div class="content">
+        <span>{{video.title}}</span>
+        <span>{{formatTime(video.lengthSeconds)}}</span>
+        <button (click)="loadVideo(video.id_youtube)" [disabled]="currentVideoId === video.id_youtube">
+          {{ currentVideoId === video.id_youtube ? "Is focused" : "Focus this" }}
+        </button>
+      </div>
+    </div>
+  }
 </div>
 

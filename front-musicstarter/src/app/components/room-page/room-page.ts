@@ -16,7 +16,7 @@ export class RoomPage implements OnInit, OnDestroy {
 
   inputYoutube = '';
   currentVideoId: string | null = null;
-  videos: string[] = [];
+  videos: any[] = [];
   private sseSub?: Subscription;
 
   constructor(private route: ActivatedRoute, private roomService: RoomService){
@@ -48,7 +48,9 @@ export class RoomPage implements OnInit, OnDestroy {
         this.videos = event.event_value;
         break;
       case 'add_video':
-        this.setYoutubeSrc(event.event_value);
+        console.log('add video called: ', event.event_value)
+        this.videos.push(event.event_value)
+        this.setYoutubeSrc(event.event_value.id_youtube);
         break;
       case 'pause_video':
         this.sendCommandFrame('pauseVideo');
@@ -77,10 +79,15 @@ export class RoomPage implements OnInit, OnDestroy {
       alert('La URL no tiene parámetro ?v=');
       return;
     }
-    this.roomService.addVideo(id, this.id_room).subscribe(() => {
-      this.setYoutubeSrc(id);
-      if (!this.videos.includes(id)) this.videos.push(id);
-    });
+    if(!this.videos.map(row=>row.id_youtube).includes(id)){
+      this.roomService.addVideo(id, this.id_room).subscribe((res: any) => {
+        console.log('add new vide response: ', res)
+        this.setYoutubeSrc(id);
+        
+      });
+    }else{
+      alert('video ya incluido')
+    }
   }
 
   pauseVideo() {
@@ -130,7 +137,11 @@ export class RoomPage implements OnInit, OnDestroy {
       this.roomService.addFriend(email).subscribe();
     }
   }
-
+  formatTime(seconds: number) {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m}:${s.toString().padStart(2, '0')}`;
+  }
   // === Helpers internos ===
   private extractVideoId(url: string): string | null {
     try {
@@ -144,7 +155,7 @@ export class RoomPage implements OnInit, OnDestroy {
   private setYoutubeSrc(id: string) {
     this.currentVideoId = id;
     this.youtubeFrame.nativeElement.src = `https://www.youtube.com/embed/${id}?enablejsapi=1`;
-    console.log('set youtube src')
+    console.log('set youtube src', id)
   }
 
   private sendCommandFrame(command: string) {
@@ -153,4 +164,5 @@ export class RoomPage implements OnInit, OnDestroy {
       '*'
     );
   }
+
 }
