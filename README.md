@@ -1,9 +1,9 @@
-🎵 MusicStarter
+**🎵 MusicStarter**
 
 MusicStarter is an online collaborative music player, built with Node.js (v20.19.4) on the backend and Angular on the frontend.
 It allows users to create rooms where multiple listeners can enjoy the same song in sync — if one user pauses, resumes, or changes the track, it updates instantly for everyone connected.
 
-✨ Features
+**✨ Features**
 
 🔐 Temporary login (real authentication coming soon)
 
@@ -15,13 +15,13 @@ It allows users to create rooms where multiple listeners can enjoy the same song
 
 ⚙️ Node.js backend with real-time communication (via http2)
 
-🚧 Project Status
+**🚧 Project Status**
 Feature	Status
 Real login	❌ Not implemented
 Temporary login	✅ Working
 Room creation	✅ Working
 Music sync across users	✅ Working
-🛠️ Tech Stack
+**🛠️ Tech Stack**
 
 Frontend: Angular
 
@@ -31,13 +31,13 @@ Real-time communication: http2
 
 Language: TypeScript / JavaScript
 
-📸 Preview
+**📸 Preview**
 <img width="1533" height="792" alt="image" src="https://github.com/user-attachments/assets/515d9b9b-c042-49a0-98e4-3e815e8bcd74" />
 
-🤝 Contributing
+**🤝 Contributing**
 
 Contributions are welcome! Feel free to open an issue or submit a pull request if you’d like to improve the project.
 
-📄 License
+**📄 License**
 
 This project is licensed under the MIT License — feel free to use and modify it.
