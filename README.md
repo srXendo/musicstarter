@@ -16,11 +16,17 @@ It allows users to create rooms where multiple listeners can enjoy the same song
 ⚙️ Node.js backend with real-time communication (via http2)
 
 **🚧 Project Status**
+
 Feature	Status
+
 Real login:	❌ Not implemented
+
 Temporary login:	✅ Working
+
 Room creation:	✅ Working
+
 Music sync across users	✅ Working
+
 **🛠️ Tech Stack**
 
 Frontend: Angular
