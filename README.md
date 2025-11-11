@@ -17,9 +17,9 @@ It allows users to create rooms where multiple listeners can enjoy the same song
 
 **🚧 Project Status**
 Feature	Status
-Real login	❌ Not implemented
-Temporary login	✅ Working
-Room creation	✅ Working
+Real login:	❌ Not implemented
+Temporary login:	✅ Working
+Room creation:	✅ Working
 Music sync across users	✅ Working
 **🛠️ Tech Stack**
 
