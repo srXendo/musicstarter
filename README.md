@@ -1,3 +1,13 @@
+**usagge**
+
+cd back-musicstarter/
+npm install
+npm run start
+open new terminal
+cd front-musicstarter
+npm install
+npm run start
+
 **🎵 MusicStarter**
 
 MusicStarter is an online collaborative music player, built with Node.js (v20.19.4) on the backend and Angular on the frontend.
