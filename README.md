@@ -1,12 +1,12 @@
-**usagge**
+**usage**
 
-cd back-musicstarter/
-npm install
-npm run start
-open new terminal
-cd front-musicstarter
-npm install
-npm run start
+cd back-musicstarter/ </br>
+npm install </br>
+npm run start </br>
+open new terminal </br>
+cd front-musicstarter </br>
+npm install </br>
+npm run start </br>
 
 **🎵 MusicStarter**
 
